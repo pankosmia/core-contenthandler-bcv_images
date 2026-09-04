@@ -1,8 +1,8 @@
 {
-  "name": "core-contenthandler_bcv_articles",
-  "version": "0.0.1",
+  "name": "core-contenthandler_bcv_images",
+  "version": "0.1.0",
   "private": true,
-  "homepage": "/clients/core-contenthandler_bcv_articles",
+  "homepage": "/clients/core-contenthandler_bcv_images",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -34,7 +34,7 @@
     "react-dom": "^19.0.0"
   },
   "scripts": {
-    "publish": "pnpm run build:package  && cd ./src/components/bcvArticlesMuncher && npm publish",
+    "publish": "pnpm run build:package  && cd ./src/components/bcvImagesMuncher && npm publish",
     "build": "vite build",
     "build:package": "vite build --mode isMuncher",
     "dev": "vite",

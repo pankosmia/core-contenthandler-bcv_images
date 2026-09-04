@@ -1,3 +1,3 @@
-# core-contenthandler_bcv_articles
+# core-contenthandler_bcv_images
 
-core-contenthandler_bcv_articles
+core-contenthandler_bcv_images

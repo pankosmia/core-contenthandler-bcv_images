@@ -4,25 +4,21 @@ import {
   bcvContext,
   debugContext,
   i18nContext,
-  wordContext,
-  netContext,
 } from "pankosmia-rcl";
 import { useContext, useState, useEffect } from "react";
 import { getJson } from "pankosmia-lib/http";
-import { WrapperNav } from "../components/bcvArticlesMuncher/wrapperMuncher/WrapperNav";
+import { WrapperNav } from "../components/bcvImagesMuncher/wrapperMuncher/WrapperNav";
 import { Padding } from "@mui/icons-material";
-import BcvArticlesViewerMuncher from "../components/bcvArticlesMuncher/muncher/Viewer/BcvArticlesViewerMuncher";
+import BcvImagesViewerMuncher from "../components/bcvImagesMuncher/muncher/Viewer/BcvImagesViewerMuncher";
 
 export function MuncherTest() {
-  const { bcvRef } = useContext(bcvContext);
+  const { systemBcv } = useContext(bcvContext);
   const { currentProjectRef } = useContext(currentProjectContext);
   const { debugRef } = useContext(debugContext);
   const { i18nRef } = useContext(i18nContext);
   const [currentBurrito, setCurrentBurrito] = useState(null);
   const [modified, setModified] = useState(false);
-  const { word } = useContext(wordContext);
-  const { enabledRef } = useContext(netContext);
-  const { systemBcv } = useContext(bcvContext);
+
   useEffect(() => {
     async function getSummary() {
       if (currentProjectRef.current) {
@@ -35,7 +31,7 @@ export function MuncherTest() {
           setCurrentBurrito([projectPath, entry]);
         } else {
           enqueueSnackbar(
-            `${doI18n("pages:core-contenthandler_bcv_articles:error", i18nRef.current)}: ${fullMetadataResponse.status}`,
+            `${doI18n("pages:core-contenthandler_bcv_images:error", i18nRef.current)}: ${fullMetadataResponse.status}`,
             { variant: "error" },
           );
         }
@@ -59,7 +55,7 @@ export function MuncherTest() {
         height: "98vh",
       }}
     >
-      <WrapperNav flavor={"x-bcvarticles"} />
+      <WrapperNav flavor={"x-bcvimages"} />
 
       <Box
         sx={{
@@ -71,12 +67,10 @@ export function MuncherTest() {
       >
         {metadata && (
           <Box sx={{ flex: 1, margin: 2 }}>
-            <BcvArticlesViewerMuncher
+            <BcvImagesViewerMuncher
               metadata={metadata}
               debugRef={debugRef}
               i18nRef={i18nRef}
-              word={word}
-              enabledRef={enabledRef}
               systemBcv={systemBcv}
             />
           </Box>
