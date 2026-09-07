@@ -55,7 +55,7 @@ export function MuncherTest() {
         height: "98vh",
       }}
     >
-      <WrapperNav flavor={"x-bcvimages"} />
+      <WrapperNav flavor={"x-bcvImages"} />
 
       <Box
         sx={{

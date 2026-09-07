@@ -6,16 +6,16 @@ import { getText } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
 import TextDir from "../helpers/TextDir";
 
-function ImageViewer({ metadata, reference }) {
-  return (
-    <Stack>
-      <img
-        src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${reference.slice(2)}.jpg`}
-        alt="resource image"
-      />
-    </Stack>
-  );
-}
+// function ImageViewer({ metadata, reference }) {
+//   return (
+//     <Stack>
+//       <img
+//         src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${reference.slice(2)}.jpg`}
+//         alt="resource image"
+//       />
+//     </Stack>
+//   );
+// }
 function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
   const [ingredient, setIngredient] = useState([]);
   const [verseNotes, setVerseNotes] = useState([]);
