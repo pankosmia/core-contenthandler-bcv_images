@@ -146,19 +146,22 @@ function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
                 width: `${verseNotes.length * 100}%`,
               }}
             >
-              {verseNotes.map((v, n) => (
-                <div
-                  key={n}
-                  className="w-full h-full flex-shrink-0 flex items-center justify-center"
-                  style={{ width: `${100 / verseNotes.length}%` }}
-                >
-                  <img
-                    src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${v.slice(2)}.jpg`}
-                    alt="resource image"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              ))}
+              {verseNotes.map((v, n) => {
+                if (!v) return null;
+                return (
+                  <div
+                    key={n}
+                    className="w-full h-full flex-shrink-0 flex items-center justify-center"
+                    style={{ width: `${100 / verseNotes.length}%` }}
+                  >
+                    <img
+                      src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${v.slice(2)}.jpg`}
+                      alt="resource image"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                );
+              })}
             </div>
 
             {/* Navigation buttons for the slider */}
