@@ -1,10 +1,19 @@
 import { useEffect, useState, useContext } from "react";
-import { Box, Stack } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  MobileStepper,
+  Button,
+  IconButton,
+} from "@mui/material";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { getText } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
 import TextDir from "../helpers/TextDir";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 // function ImageViewer({ metadata, reference }) {
 //   return (
@@ -87,6 +96,7 @@ function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
   );
 
   const [verseCaptions, setVerseCaptions] = useState([]);
+  const maxSteps = verseNotes?.length || 0;
 
   useEffect(
     () => {
@@ -129,89 +139,61 @@ function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
     }
   };
 
+  if (!ingredient || maxSteps === 0) {
+    return (
+      <Box dir={!sbScriptDirSet ? textDir : undefined}>
+        {doI18n("munchers:bcv_images_viewer:no_images_found", i18nRef.current)}
+        {` (${systemBcv.bookCode} ${systemBcv.chapterNum}:${systemBcv.verseNum}${
+          systemBcv.endVerseNum && systemBcv.endVerseNum !== systemBcv.verseNum
+            ? `-${systemBcv.endVerseNum}`
+            : ""
+        })`}
+      </Box>
+    );
+  }
+
   // If SB does not specify direction then it is set here, otherwise it has already been set per SB in WorkspaceCard
   return (
-    <Box
-      className="h-full w-full flex flex-col overflow-hidden"
-      dir={!sbScriptDirSet ? textDir : undefined}
-    >
-      <div className="flex-1 min-h-0 min-w-0 overflow-hidden p-2">
-        {ingredient && verseNotes.length > 0 ? (
-          <div className="relative w-full h-full overflow-hidden">
-            {/* Slider images */}
-            <div
-              className="flex transition-transform duration-300 ease-out h-full"
-              style={{
-                transform: `translateX(-${current * (100 / verseNotes.length)}%)`,
-                width: `${verseNotes.length * 100}%`,
-              }}
-            >
-              {verseNotes.map((v, n) => {
-                if (!v) return null;
-                return (
-                  <div
-                    key={n}
-                    className="w-full h-full flex-shrink-0 flex items-center justify-center"
-                    style={{ width: `${100 / verseNotes.length}%` }}
-                  >
-                    <img
-                      src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${v.slice(2)}.jpg`}
-                      alt="resource image"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                );
-              })}
-            </div>
+    <Box dir={!sbScriptDirSet ? textDir : undefined} sx={{ width: "100%" }}>
+      <Box
+        component="img"
+        src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${verseNotes[current].slice(2)}.jpg`}
+        alt="resource image"
+        sx={{ width: "100%", height: 300, objectFit: "contain" }}
+      />
 
-            {/* Navigation buttons for the slider */}
-            <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-4">
-              <button
-                className="cursor-pointer pointer-events-auto bg-blue-300 hover:bg-blue-400 rounded-full p-1 text-white"
-                onClick={previousSlide}
-              >
-                <ArrowCircleLeftIcon />
-              </button>
-              <button
-                className="cursor-pointer pointer-events-auto bg-blue-300 hover:bg-blue-400 rounded-full p-1 text-white"
-                onClick={nextSlide}
-              >
-                <ArrowCircleRightIcon />
-              </button>
-            </div>
+      <Typography align="center" sx={{ mt: 1 }}>
+        {`${verseCaptions[current]} (${current + 1} of ${verseNotes.length})`}
+      </Typography>
 
-            {/* Circle buttons bottom of the image */}
-            <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-16">
-              <div className="flex justify-center gap-3 pointer-events-none">
-                {verseNotes.map((v, n) => {
-                  return (
-                    <div
-                      onClick={() => {
-                        setCurrent(n);
-                      }}
-                      key={"circle" + n}
-                      className={`rounded-full w-4 h-4 cursor-pointer pointer-events-auto hover:bg-opacity-80 border border-gray-300/30 shadow-sm ${
-                        n == current ? "bg-blue-300" : "bg-gray-700"
-                      }`}
-                    ></div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Caption below the slider */}
-            <div className="absolute bottom-0 left-0 right-0 text-center py-4 px-4 text-base font-medium text-gray-800 bg-white bg-opacity-95 shadow-lg">
-              {`${verseCaptions[current]} (${current + 1} of ${verseNotes.length})`}
-            </div>
-          </div>
-        ) : (
-          doI18n(
-            "munchers:bcv_images_viewer:no_images_found",
-            i18nRef.current,
-          ) +
-          ` (${systemBcv.bookCode} ${systemBcv.chapterNum}:${systemBcv.verseNum}${systemBcv.endVerseNum && systemBcv.endVerseNum !== systemBcv.verseNum ? `-${systemBcv.endVerseNum}` : ""}}`
-        )}
-      </div>
+      <MobileStepper
+        variant="dots"
+        steps={maxSteps}
+        position="static"
+        activeStep={current}
+        nextButton={
+          <Button
+            size="small"
+            onClick={nextSlide}
+            disabled={current === maxSteps - 1}
+          >
+            {doI18n(
+              "pages:core-contenthandler-bcv_images:next",
+              i18nRef.current,
+            )}
+            <KeyboardArrowRight />
+          </Button>
+        }
+        backButton={
+          <Button size="small" onClick={previousSlide} disabled={current === 0}>
+            <KeyboardArrowLeft />
+            {doI18n(
+              "pages:core-contenthandler-bcv_images:previous",
+              i18nRef.current,
+            )}
+          </Button>
+        }
+      />
     </Box>
   );
 }

@@ -34,6 +34,18 @@
     "error": {
       "en": "Error",
       "fr": "Un erreur est survenue"
+    },
+    "next": {
+      "en": "Next",
+      "fr": "Suivant"
+    },
+    "previous": {
+      "en": "Previous",
+      "fr": "Précédent"
+    },
+    "no_images_found": {
+      "en": "No images found",
+      "fr": "Pas d'image trouvée"
     }
   }
 }
