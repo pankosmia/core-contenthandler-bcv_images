@@ -1,8 +1,8 @@
 {
-  "name": "core-contenthandler_bcv_images",
+  "name": "core-contenthandler-bcv_images",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/clients/core-contenthandler_bcv_images",
+  "homepage": "/clients/core-contenthandler-bcv_images",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
