@@ -1,11 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, IconButton } from "@mui/material";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { getText } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
 import TextDir from "../helpers/TextDir";
-
 // function ImageViewer({ metadata, reference }) {
 //   return (
 //     <Stack>
@@ -129,89 +128,172 @@ function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
     }
   };
 
-  // If SB does not specify direction then it is set here, otherwise it has already been set per SB in WorkspaceCard
   return (
     <Box
       className="h-full w-full flex flex-col overflow-hidden"
       dir={!sbScriptDirSet ? textDir : undefined}
     >
-      <div className="flex-1 min-h-0 min-w-0 overflow-hidden p-2">
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          minWidth: 0,
+          overflow: "hidden",
+          p: 1,
+        }}
+      >
         {ingredient && verseNotes.length > 0 ? (
-          <div className="relative w-full h-full overflow-hidden">
-            {/* Slider images */}
-            <div
-              className="flex transition-transform duration-300 ease-out h-full"
-              style={{
-                transform: `translateX(-${current * (100 / verseNotes.length)}%)`,
-                width: `${verseNotes.length * 100}%`,
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* Current image */}
+            <Box
+              component="img"
+              src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${verseNotes[current]?.slice(2)}.jpg`}
+              alt="resource image"
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+
+            {/* Previous button */}
+            <IconButton
+              aria-label="Previous image"
+              onClick={previousSlide}
+              sx={{
+                position: "absolute",
+                left: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 2,
+                backgroundColor: "rgba(144, 202, 249, 0.9)",
+                color: "white",
+
+                "&:hover": {
+                  backgroundColor: "rgba(100, 181, 246, 1)",
+                },
               }}
             >
-              {verseNotes.map((v, n) => {
-                if (!v) return null;
-                return (
-                  <div
-                    key={n}
-                    className="w-full h-full flex-shrink-0 flex items-center justify-center"
-                    style={{ width: `${100 / verseNotes.length}%` }}
-                  >
-                    <img
-                      src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${v.slice(2)}.jpg`}
-                      alt="resource image"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                );
-              })}
-            </div>
+              <ArrowCircleLeftIcon fontSize="large" />
+            </IconButton>
 
-            {/* Navigation buttons for the slider */}
-            <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-4">
-              <button
-                className="cursor-pointer pointer-events-auto bg-blue-300 hover:bg-blue-400 rounded-full p-1 text-white"
-                onClick={previousSlide}
-              >
-                <ArrowCircleLeftIcon />
-              </button>
-              <button
-                className="cursor-pointer pointer-events-auto bg-blue-300 hover:bg-blue-400 rounded-full p-1 text-white"
-                onClick={nextSlide}
-              >
-                <ArrowCircleRightIcon />
-              </button>
-            </div>
+            {/* Next button */}
+            <IconButton
+              aria-label="Next image"
+              onClick={nextSlide}
+              sx={{
+                position: "absolute",
+                right: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 2,
+                backgroundColor: "rgba(144, 202, 249, 0.9)",
+                color: "white",
 
-            {/* Circle buttons bottom of the image */}
-            <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-16">
-              <div className="flex justify-center gap-3 pointer-events-none">
-                {verseNotes.map((v, n) => {
-                  return (
-                    <div
-                      onClick={() => {
-                        setCurrent(n);
-                      }}
-                      key={"circle" + n}
-                      className={`rounded-full w-4 h-4 cursor-pointer pointer-events-auto hover:bg-opacity-80 border border-gray-300/30 shadow-sm ${
-                        n == current ? "bg-blue-300" : "bg-gray-700"
-                      }`}
-                    ></div>
-                  );
-                })}
-              </div>
-            </div>
+                "&:hover": {
+                  backgroundColor: "rgba(100, 181, 246, 1)",
+                },
+              }}
+            >
+              <ArrowCircleRightIcon fontSize="large" />
+            </IconButton>
 
-            {/* Caption below the slider */}
-            <div className="absolute bottom-0 left-0 right-0 text-center py-4 px-4 text-base font-medium text-gray-800 bg-white bg-opacity-95 shadow-lg">
-              {`${verseCaptions[current]} (${current + 1} of ${verseNotes.length})`}
-            </div>
-          </div>
+            {/* Image position dots */}
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                position: "absolute",
+                bottom: 70,
+                left: "50%",
+                transform: "translateX(-50%)",
+                zIndex: 2,
+              }}
+            >
+              {verseNotes.map((v, n) => (
+                <Box
+                  key={`circle-${n}`}
+                  component="button"
+                  aria-label={`Go to image ${n + 1}`}
+                  onClick={() => setCurrent(n)}
+                  sx={{
+                    width: 14,
+                    height: 14,
+                    minWidth: 14,
+                    p: 0,
+                    border: "1px solid",
+                    borderColor: "grey.300",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    backgroundColor:
+                      n === current ? "primary.light" : "grey.700",
+                    boxShadow: 1,
+
+                    "&:hover": {
+                      opacity: 0.8,
+                    },
+                  }}
+                />
+              ))}
+            </Stack>
+
+            {/* Caption */}
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 2,
+                textAlign: "center",
+                py: 2,
+                px: 2,
+                fontSize: "1rem",
+                fontWeight: 500,
+                color: "grey.800",
+                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                boxShadow: 3,
+              }}
+            >
+              {verseCaptions[current] || ""}
+              {` (${current + 1} of ${verseNotes.length})`}
+            </Box>
+          </Box>
         ) : (
-          doI18n(
-            "munchers:bcv_images_viewer:no_images_found",
-            i18nRef.current,
-          ) +
-          ` (${systemBcv.bookCode} ${systemBcv.chapterNum}:${systemBcv.verseNum}${systemBcv.endVerseNum && systemBcv.endVerseNum !== systemBcv.verseNum ? `-${systemBcv.endVerseNum}` : ""}}`
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              p: 2,
+            }}
+          >
+            {doI18n(
+              "munchers:bcv_images_viewer:no_images_found",
+              i18nRef.current,
+            ) +
+              ` (${systemBcv.bookCode} ${systemBcv.chapterNum}:${systemBcv.verseNum}${
+                systemBcv.endVerseNum &&
+                systemBcv.endVerseNum !== systemBcv.verseNum
+                  ? `-${systemBcv.endVerseNum}`
+                  : ""
+              })`}
+          </Box>
         )}
-      </div>
+      </Box>
     </Box>
   );
 }
