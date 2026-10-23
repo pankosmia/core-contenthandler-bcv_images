@@ -1,4 +1,4 @@
-import { getJson, PostEmpty, getText } from "pankosmia-lib/http";
+import { getJson, postEmpty, getText } from "pankosmia-lib/http";
 export async function getFirstChapterTextTranslation(
   currentProjectRefCurr,
   debugRefCurr,
@@ -14,7 +14,7 @@ export async function getFirstChapterTextTranslation(
     const match = usfmString.match(re);
     if (match) {
       const chapter = match[1];
-      PostEmpty(`/api/navigation/bcv/${bookCode}/${chapter}/1`, debugRefCurr);
+      postEmpty(`/api/navigation/bcv/${bookCode}/${chapter}/1`, debugRefCurr);
     }
   }
 }
@@ -31,7 +31,7 @@ export async function getFirstChapterJuxta(
   );
   if (responce.ok) {
     let [chapter, verse] = responce.json[0].chunks[0].source[0].cv.split(":");
-    let responsePost = await PostEmpty(
+    let responsePost = await postEmpty(
       `/api/navigation/bcv/${bookCode}/${chapter}/${verse}`,
       debugRefCurr,
     );
@@ -71,7 +71,7 @@ export async function getFirstChapterBCVNotes(
 
     if (firstCol.length > 0) {
       const { chapter, verse } = firstCol[0]; // get the first valid chapter:verse
-      PostEmpty(
+      postEmpty(
         `/api/navigation/bcv/${bookCode}/${chapter}/${verse}`,
         debugRefCurr,
       );

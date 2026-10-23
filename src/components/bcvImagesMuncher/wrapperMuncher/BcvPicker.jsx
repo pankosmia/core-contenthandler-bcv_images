@@ -1,5 +1,5 @@
 import { Button, TextField, Stack, Typography } from "@mui/material";
-import { PostEmpty } from "pankosmia-lib/http";
+import { postEmpty } from "pankosmia-lib/http";
 import { useContext, useEffect, useState } from "react";
 import { bcvContext, debugContext } from "pankosmia-rcl";
 
@@ -81,7 +81,7 @@ export function BcvPicker() {
         sx={{ height: 40 }}
         variant="contained"
         onClick={() =>
-          PostEmpty(
+          postEmpty(
             `/api/navigation/bcv/${bookCode}/${chapter}/${verseStart}/${verseEnd}`,
             debugRef.current,
           )
