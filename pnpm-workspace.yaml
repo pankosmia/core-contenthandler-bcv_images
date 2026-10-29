@@ -2,6 +2,8 @@ allowBuilds:
   core-js: false
   core-js-pure: false
   esbuild: false
+minimumReleaseAgeExclude:
+  - pankosmia-rcl@0.8.4 || 0.8.5
 supportedArchitectures:
   os:
     - win32

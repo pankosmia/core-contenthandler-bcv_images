@@ -4,6 +4,7 @@ import {
   bcvContext,
   debugContext,
   i18nContext,
+  Header,
 } from "pankosmia-rcl";
 import { useContext, useState, useEffect } from "react";
 import { getJson } from "pankosmia-lib/http";
@@ -51,18 +52,26 @@ export function MuncherTest() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        margin: 3,
-        height: "98vh",
+        height: "100%",
+        overflow: "hidden",
       }}
     >
-      <WrapperNav flavor={"x-bcvImages"} />
+      <Box>
+        <Header
+          titleKey={"pages:core-contenthandler-bcv_images:titleMuncherTest"}
+          currentId="content"
+          requireNet={false}
+        />
+      </Box>
+      <Box sx={{ paddingLeft: 2, paddingTop: 2 }}>
+        <WrapperNav flavor={"x-bcvImages"} />
+      </Box>
 
       <Box
         sx={{
-          display: "flex",
-          width: "100%",
-          overflowY: "scroll",
-          paddingTop: 5,
+          flex: 1,
+          minHeight: 0,
+          overflow: "auto",
         }}
       >
         {metadata && (

@@ -15,16 +15,6 @@ import TextDir from "../helpers/TextDir";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-// function ImageViewer({ metadata, reference }) {
-//   return (
-//     <Stack>
-//       <img
-//         src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${reference.slice(2)}.jpg`}
-//         alt="resource image"
-//       />
-//     </Stack>
-//   );
-// }
 function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
   const [ingredient, setIngredient] = useState([]);
   const [verseNotes, setVerseNotes] = useState([]);
@@ -157,7 +147,10 @@ function BcvImagesViewerMuncher({ metadata, i18nRef, debugRef, systemBcv }) {
     <Box dir={!sbScriptDirSet ? textDir : undefined} sx={{ width: "100%" }}>
       <Box
         component="img"
-        src={`/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${verseNotes[current].slice(2)}.jpg`}
+        src={
+          verseNotes[current] &&
+          `/api/burrito/ingredient/bytes/${metadata.local_path}?ipath=${verseNotes[current].slice(2)}.jpg`
+        }
         alt="resource image"
         sx={{ width: "100%", height: 300, objectFit: "contain" }}
       />
