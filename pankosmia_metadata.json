@@ -7,7 +7,7 @@
     "net": false,
     "debug": true
   },
-  "enpoints": {
+  "endpoints": {
     "x_bcvimages": {}
   },
   "i18n": {
